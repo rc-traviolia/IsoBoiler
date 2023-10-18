@@ -4,7 +4,7 @@
     <TargetFramework>net6.0</TargetFramework>
     <ImplicitUsings>enable</ImplicitUsings>
     <Nullable>enable</Nullable>
-    <Version>0.0.3</Version>
+    <Version>0.0.11</Version>
     <GeneratePackageOnBuild>True</GeneratePackageOnBuild>
     <Title>IsoBoiler</Title>
     <PackageLicenseFile>LICENSE.txt</PackageLicenseFile>
@@ -14,11 +14,11 @@
     <Authors>Richard Traviolia</Authors>
     <Description>Boilerplate code for creating Isolated Azure Functions</Description>
     <DebugType>embedded</DebugType>
+    <PackageProjectUrl>https://github.com/rc-traviolia/IsoBoiler</PackageProjectUrl>
   </PropertyGroup>
 
   <ItemGroup>
     <PackageReference Include="Azure.Identity" Version="1.10.2" />
-    <PackageReference Include="Microsoft.Azure.Functions.Worker.Extensions.OpenApi" Version="1.5.1" />
     <PackageReference Include="Microsoft.Extensions.Hosting.Abstractions" Version="7.0.0" />
     <PackageReference Include="Microsoft.Azure.AppConfiguration.Functions.Worker" Version="6.1.0" />
     <PackageReference Include="Microsoft.Azure.Functions.Extensions" Version="1.1.0" />

@@ -1,10 +1,9 @@
 ﻿using Azure.Identity;
 using Microsoft.Azure.Functions.Worker;
-using Microsoft.Azure.Functions.Worker.Extensions.OpenApi.Extensions;
 using Microsoft.Extensions.Configuration;
+using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
-using System;
 
 namespace IsoBoiler
 {
@@ -25,13 +24,37 @@ namespace IsoBoiler
                         .ConfigureKeyVault(kv => { kv.SetCredential(new DefaultAzureCredential()); });
                 });
             })
-            //.ConfigureOpenApi()
             .ConfigureFunctionsWorkerDefaults(builder =>
             {
                 builder.AddApplicationInsights().AddApplicationInsightsLogger();
             });
             return iHostBuilder;
         }
+
+        public static IHostBuilder AddInitialConfiguration(this IHostBuilder iHostBuilder, Action<HostBuilderContext, IServiceCollection> configureDelegate)
+        {
+            if (string.IsNullOrWhiteSpace(Environment.GetEnvironmentVariable("AppConfigurationConnectionString")))
+            {
+                throw new InvalidOperationException("You must have an Environment Variable named: 'AppConfigurationConnectionString' in order to use AddInitialConfiguration().");
+            }
+
+            iHostBuilder.ConfigureAppConfiguration((context, builder) =>
+            {
+                builder.AddAzureAppConfiguration(options =>
+                {
+                    options.Connect(Environment.GetEnvironmentVariable("AppConfigurationConnectionString"))
+                        .ConfigureKeyVault(kv => { kv.SetCredential(new DefaultAzureCredential()); });
+                });
+            })
+            .ConfigureFunctionsWorkerDefaults(builder =>
+            {
+                builder.AddApplicationInsights().AddApplicationInsightsLogger();
+            })
+            .ConfigureServices(configureDelegate);
+
+            return iHostBuilder;
+        }
+
     }
 }
 
