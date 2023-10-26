@@ -55,6 +55,17 @@ namespace IsoBoiler
             return iHostBuilder;
         }
 
+        public static TServiceType GetService<TServiceType>(this IServiceCollection services)
+        {
+            var service = services.BuildServiceProvider().GetService<TServiceType>();
+            if(service == null)
+            {
+                throw new InvalidOperationException($"Service type was not found in the IServicesCollection");
+            }
+
+            return service;
+        }
+
     }
 }
 
