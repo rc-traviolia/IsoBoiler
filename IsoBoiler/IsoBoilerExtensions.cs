@@ -47,7 +47,7 @@ namespace IsoBoiler
         {
             if (string.IsNullOrWhiteSpace(Environment.GetEnvironmentVariable("AppConfigurationConnectionString")))
             {
-                throw new InvalidOperationException("You must have an Environment Variable named: 'AppConfigurationConnectionString' in order to use AddInitialConfiguration().");
+                throw new InvalidOperationException("There was an error automatically creating your configurationFilter for the Azure App Configuration. Please provide one by using HostRunner.UseConfigurationFilter() or the appropriate .AddInitialConfiguration() parameter.");
             }
 
             if (string.IsNullOrWhiteSpace(configurationFilter))
@@ -55,7 +55,7 @@ namespace IsoBoiler
                 configurationFilter = Assembly.GetEntryAssembly().GetName().Name.Contains('.') ? Assembly.GetEntryAssembly().GetName().Name.Split('.').Last() : Assembly.GetEntryAssembly().GetName().Name;
                 if (string.IsNullOrWhiteSpace(configurationFilter))
                 {
-                    throw new InvalidOperationException("There was an error automatically creating your configurationFilter for the Azure App Configuration. Please provide one.");
+                    throw new InvalidOperationException("There was an error automatically creating your configurationFilter for the Azure App Configuration. Please provide one by using HostRunner.UseConfigurationFilter() or the appropriate .AddInitialConfiguration() parameter.");
                 }
             }
 
