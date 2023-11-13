@@ -23,6 +23,23 @@ namespace IsoBoiler
 
             await host.RunAsync();
         }
+        public static StoredConfigurationFilter UseConfigurationFilter(string configurationFilter)
+        {
+            return new StoredConfigurationFilter() { Value = configurationFilter };
+        }
+        public static async Task RunWithServices(this StoredConfigurationFilter configurationFilterObject, Action<HostBuilderContext, IServiceCollection> configureDelegate)
+        {
+            if (string.IsNullOrWhiteSpace(Environment.GetEnvironmentVariable("AppConfigurationConnectionString")))
+            {
+                throw new InvalidOperationException("You must have an Environment Variable named: 'AppConfigurationConnectionString' in order to use AddInitialConfiguration().");
+            }
+
+            var host = new HostBuilder().AddInitialConfiguration(configureDelegate, configurationFilterObject.Value)
+            .Build();
+
+            await host.RunAsync();
+        }
+
         public static async Task RunWithServices(Action<HostBuilderContext, IServiceCollection> configureDelegate)
         {
             if (string.IsNullOrWhiteSpace(Environment.GetEnvironmentVariable("AppConfigurationConnectionString")))
@@ -35,5 +52,10 @@ namespace IsoBoiler
 
             await host.RunAsync();
         }
+    }
+
+    public class StoredConfigurationFilter
+    {
+        public string Value { get; set; }
     }
 }
