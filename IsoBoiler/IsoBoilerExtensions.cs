@@ -11,6 +11,14 @@ namespace IsoBoiler
 {
     public static class IsoBoilerExtensions
     {
+        public static IHostBuilder AddBasicConfiguration(this IHostBuilder iHostBuilder)
+        {
+            iHostBuilder.ConfigureFunctionsWorkerDefaults(builder =>
+            {
+                builder.AddApplicationInsights().AddApplicationInsightsLogger();
+            });
+            return iHostBuilder;
+        }
         public static IHostBuilder AddInitialConfiguration(this IHostBuilder iHostBuilder, string configurationFilter = "")
         {
             if (string.IsNullOrWhiteSpace(Environment.GetEnvironmentVariable("AppConfigurationConnectionString")))

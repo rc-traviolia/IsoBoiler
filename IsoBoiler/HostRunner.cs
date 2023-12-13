@@ -52,6 +52,15 @@ namespace IsoBoiler
 
             await host.RunAsync();
         }
+
+        public static async Task RunBasicWithServices(Action<HostBuilderContext, IServiceCollection> configureDelegate)
+        {
+
+            var host = new HostBuilder().AddBasicConfiguration().ConfigureServices(configureDelegate)
+            .Build();
+
+            await host.RunAsync();
+        }
     }
 
     public class StoredConfigurationFilter
