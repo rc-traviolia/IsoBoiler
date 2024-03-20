@@ -16,6 +16,19 @@ namespace IsoBoiler
             iHostBuilder.ConfigureFunctionsWorkerDefaults(builder =>
             {
                 builder.AddApplicationInsights().AddApplicationInsightsLogger();
+            })
+            .ConfigureLogging(logging =>
+            {
+                //The Worker logger is configured separately from the Host logger, which is configured in the host.json file
+                //Removing the default rule allows Information to be traced by the Worker process
+                logging.Services.Configure<LoggerFilterOptions>(options =>
+                {
+                    LoggerFilterRule? defaultRule = options.Rules.FirstOrDefault(rule => rule.ProviderName == "Microsoft.Extensions.Logging.ApplicationInsights.ApplicationInsightsLoggerProvider");
+                    if (defaultRule is not null)
+                    {
+                        options.Rules.Remove(defaultRule);
+                    }
+                });
             });
             return iHostBuilder;
         }
@@ -79,6 +92,17 @@ namespace IsoBoiler
             .ConfigureFunctionsWorkerDefaults(builder =>
             {
                 builder.AddApplicationInsights().AddApplicationInsightsLogger();
+            })
+            .ConfigureLogging(logging =>
+            {
+                logging.Services.Configure<LoggerFilterOptions>(options =>
+                {
+                    LoggerFilterRule? defaultRule = options.Rules.FirstOrDefault(rule => rule.ProviderName == "Microsoft.Extensions.Logging.ApplicationInsights.ApplicationInsightsLoggerProvider");
+                    if (defaultRule is not null)
+                    {
+                        options.Rules.Remove(defaultRule);
+                    }
+                });
             })
             .ConfigureServices(configureDelegate);
 
