@@ -93,14 +93,14 @@ namespace IsoBoiler
             {
                 builder.AddApplicationInsights().AddApplicationInsightsLogger();
             })
-            .ConfigureLogging(logging =>
+            .ConfigureServices(services =>
             {
-                logging.Services.Configure<LoggerFilterOptions>(options =>
+                services.Configure<LoggerFilterOptions>(options =>
                 {
-                    LoggerFilterRule? defaultRule = options.Rules.FirstOrDefault(rule => rule.ProviderName == "Microsoft.Extensions.Logging.ApplicationInsights.ApplicationInsightsLoggerProvider");
-                    if (defaultRule is not null)
+                    var toRemove = options.Rules.FirstOrDefault(rule => rule.ProviderName == "Microsoft.Extensions.Logging.ApplicationInsights.ApplicationInsightsLoggerProvider");
+                    if (toRemove is not null)
                     {
-                        options.Rules.Remove(defaultRule);
+                        options.Rules.Remove(toRemove);
                     }
                 });
             })

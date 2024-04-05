@@ -45,7 +45,7 @@ namespace IsoBoiler
             if (string.IsNullOrWhiteSpace(Environment.GetEnvironmentVariable("AppConfigurationConnectionString")))
             {
                 throw new InvalidOperationException("You must have an Environment Variable named: 'AppConfigurationConnectionString' in order to use AddInitialConfiguration().");
-            }
+            }       
 
             var host = new HostBuilder().AddInitialConfiguration(configureDelegate)
             .Build();
