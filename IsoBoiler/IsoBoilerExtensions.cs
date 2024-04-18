@@ -13,23 +13,8 @@ namespace IsoBoiler
     {
         public static IHostBuilder AddBasicConfiguration(this IHostBuilder iHostBuilder)
         {
-            iHostBuilder.ConfigureFunctionsWorkerDefaults(builder =>
-            {
-                builder.AddApplicationInsights().AddApplicationInsightsLogger();
-            })
-            .ConfigureLogging(logging =>
-            {
-                //The Worker logger is configured separately from the Host logger, which is configured in the host.json file
-                //Removing the default rule allows Information to be traced by the Worker process
-                logging.Services.Configure<LoggerFilterOptions>(options =>
-                {
-                    LoggerFilterRule? defaultRule = options.Rules.FirstOrDefault(rule => rule.ProviderName == "Microsoft.Extensions.Logging.ApplicationInsights.ApplicationInsightsLoggerProvider");
-                    if (defaultRule is not null)
-                    {
-                        options.Rules.Remove(defaultRule);
-                    }
-                });
-            });
+            iHostBuilder.ConfigureFunctionsWorkerDefaults();
+
             return iHostBuilder;
         }
         public static IHostBuilder AddInitialConfiguration(this IHostBuilder iHostBuilder, string configurationFilter = "")
@@ -48,7 +33,8 @@ namespace IsoBoiler
                 }
             }
 
-            iHostBuilder.ConfigureAppConfiguration((context, builder) =>
+            iHostBuilder.ConfigureFunctionsWorkerDefaults()
+            .ConfigureAppConfiguration((context, builder) =>
             {
                 builder.AddAzureAppConfiguration(options =>
                 {
@@ -57,10 +43,26 @@ namespace IsoBoiler
                            .ConfigureKeyVault(kv => { kv.SetCredential(new DefaultAzureCredential()); });
                 });
             })
-            .ConfigureFunctionsWorkerDefaults(builder =>
+            .ConfigureServices(services =>
             {
-                builder.AddApplicationInsights().AddApplicationInsightsLogger();
+                services.AddApplicationInsightsTelemetryWorkerService();
+                services.ConfigureFunctionsApplicationInsights();
+            })
+            .ConfigureLogging(logging =>
+            {
+                //The Worker logger is configured separately from the Host logger, which is configured in the host.json file.
+                //Removing the default rule allows Information to be traced by the Worker process to Application Insights.
+                //Console logging is handled separately, and you will need to add "Function":"Information" to the host.json "logLevel" section
+                logging.Services.Configure<LoggerFilterOptions>(options =>
+                {
+                    LoggerFilterRule? defaultRule = options.Rules.FirstOrDefault(rule => rule.ProviderName == "Microsoft.Extensions.Logging.ApplicationInsights.ApplicationInsightsLoggerProvider");
+                    if (defaultRule is not null)
+                    {
+                        options.Rules.Remove(defaultRule);
+                    }
+                });
             });
+
             return iHostBuilder;
         }
 
@@ -80,7 +82,8 @@ namespace IsoBoiler
                 }
             }
 
-            iHostBuilder.ConfigureAppConfiguration((context, builder) =>
+            iHostBuilder.ConfigureFunctionsWorkerDefaults()
+            .ConfigureAppConfiguration((context, builder) =>
             {
                 builder.AddAzureAppConfiguration(options =>
                 {
@@ -89,18 +92,22 @@ namespace IsoBoiler
                            .ConfigureKeyVault(kv => { kv.SetCredential(new DefaultAzureCredential()); });
                 });
             })
-            .ConfigureFunctionsWorkerDefaults(builder =>
-            {
-                builder.AddApplicationInsights().AddApplicationInsightsLogger();
-            })
             .ConfigureServices(services =>
             {
-                services.Configure<LoggerFilterOptions>(options =>
+                services.AddApplicationInsightsTelemetryWorkerService();
+                services.ConfigureFunctionsApplicationInsights();
+            })
+            .ConfigureLogging(logging =>
+            {
+                ///The Worker logger is configured separately from the Host logger, which is configured in the host.json file.
+                //Removing the default rule allows Information to be traced by the Worker process to Application Insights.
+                //Console logging is handled separately, and you will need to add "Function":"Information" to the host.json "logLevel" section
+                logging.Services.Configure<LoggerFilterOptions>(options =>
                 {
-                    var toRemove = options.Rules.FirstOrDefault(rule => rule.ProviderName == "Microsoft.Extensions.Logging.ApplicationInsights.ApplicationInsightsLoggerProvider");
-                    if (toRemove is not null)
+                    LoggerFilterRule? defaultRule = options.Rules.FirstOrDefault(rule => rule.ProviderName == "Microsoft.Extensions.Logging.ApplicationInsights.ApplicationInsightsLoggerProvider");
+                    if (defaultRule is not null)
                     {
-                        options.Rules.Remove(toRemove);
+                        options.Rules.Remove(defaultRule);
                     }
                 });
             })

@@ -10,19 +10,13 @@ namespace IsoBoiler
 {
     public static class HostRunner
     {
-        [Obsolete("Please use RunWithServices() instead.")]
-        public static async Task RunHostWithServices(Action<HostBuilderContext, IServiceCollection> configureDelegate)
-        {
-            if (string.IsNullOrWhiteSpace(Environment.GetEnvironmentVariable("AppConfigurationConnectionString")))
-            {
-                throw new InvalidOperationException("You must have an Environment Variable named: 'AppConfigurationConnectionString' in order to use AddInitialConfiguration().");
-            }
 
-            var host = new HostBuilder().AddInitialConfiguration(configureDelegate)
-            .Build();
-
-            await host.RunAsync();
-        }
+        /// <summary>
+        /// If you do not apply a ConfigurationFilter then your snapshot will include <strong>everything</strong> on the configuration resource,
+        /// instead of just the section for your applicaiton.
+        /// </summary>
+        /// <param name="configurationFilter"></param>
+        /// <returns></returns>
         public static StoredConfigurationFilter UseConfigurationFilter(string configurationFilter)
         {
             return new StoredConfigurationFilter() { Value = configurationFilter };
