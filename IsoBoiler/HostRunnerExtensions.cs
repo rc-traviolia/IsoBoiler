@@ -6,6 +6,7 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
+using Microsoft.FeatureManagement;
 using System.Reflection;
 using System.Text.Json;
 
@@ -84,10 +85,22 @@ namespace IsoBoiler
                                .ConfigureKeyVault(kv => { kv.SetCredential(new DefaultAzureCredential()); })
                                .ConfigureRefresh(refreshOptions =>
                                {
-                                   refreshOptions.Register($"{configurationFilter}:*", refreshAll: true)
-                                                 .SetCacheExpiration(TimeSpan.FromSeconds(30)); 
+                                   refreshOptions.Register($"{configurationFilter}:Sentinel", refreshAll: true)
+                                                 .SetCacheExpiration(TimeSpan.FromSeconds(30)); //Default value is 30
                                });
                     });
+                })
+                .ConfigureServices(services =>
+                {
+                    //This is required for the IOptionsSnapshots to actually refresh
+                    //https://github.com/Azure/AppConfiguration/blob/main/examples/DotNetCore/AzureFunction/FunctionAppIsolatedMode/Program.cs
+                    services.AddAzureAppConfiguration()
+                            .AddFeatureManagement();
+                })
+                .ConfigureFunctionsWorkerDefaults(app =>
+                {
+                    ///For Config Refresh
+                    app.UseAzureAppConfiguration();
                 });
 
                 return iHostBuilder;
@@ -104,10 +117,22 @@ namespace IsoBoiler
                                .ConfigureKeyVault(kv => { kv.SetCredential(new DefaultAzureCredential()); })
                                .ConfigureRefresh(refreshOptions =>
                                {
-                                   refreshOptions.Register($"{configurationFilter}:*", refreshAll: true)
-                                                 .SetCacheExpiration(TimeSpan.FromSeconds(30)); 
+                                   refreshOptions.Register($"{configurationFilter}:Sentinel", refreshAll: true)
+                                                 .SetCacheExpiration(TimeSpan.FromSeconds(30)); //Default value is 30
                                });
                     });
+                })
+                .ConfigureServices(services =>
+                {
+                    //This is required for the IOptionsSnapshots to actually refresh
+                    //https://github.com/Azure/AppConfiguration/blob/main/examples/DotNetCore/AzureFunction/FunctionAppIsolatedMode/Program.cs
+                    services.AddAzureAppConfiguration()
+                            .AddFeatureManagement();
+                })
+                .ConfigureFunctionsWorkerDefaults(app =>
+                {
+                    ///For Config Refresh
+                    app.UseAzureAppConfiguration();
                 });
 
                 return iHostBuilder;

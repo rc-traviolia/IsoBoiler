@@ -1,6 +1,8 @@
 ﻿using IsoBoiler.Logging;
+using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
+using Microsoft.FeatureManagement;
 
 namespace IsoBoiler
 {
@@ -30,8 +32,7 @@ namespace IsoBoiler
                 throw new InvalidOperationException($"You must have an Environment Variable named: '{Constants.APP_CONFIG_ENDPOINT}' in order to use RunWithServices(). 'AppConfigurationConnectionString' has been deprecated.");
             }
 
-            var host = new HostBuilder().ConfigureFunctionsWorkerDefaults()
-                                        .AddDefaultJsonSerializerOptions()
+            var host = new HostBuilder().AddDefaultJsonSerializerOptions()
                                         .AddApplicationInsights()
                                         .AddLogBoiler()
                                         .AddConfiguration(storedConfigurationOptions)
@@ -48,8 +49,7 @@ namespace IsoBoiler
                 throw new InvalidOperationException($"You must have an Environment Variable named: '{Constants.APP_CONFIG_ENDPOINT}' in order to use RunWithServices(). 'AppConfigurationConnectionString' has been deprecated.");
             }
 
-            var host = new HostBuilder().ConfigureFunctionsWorkerDefaults()
-                                        .AddDefaultJsonSerializerOptions()
+            var host = new HostBuilder().AddDefaultJsonSerializerOptions()
                                         .AddApplicationInsights()
                                         .AddLogBoiler()
                                         .AddConfiguration()
@@ -62,7 +62,7 @@ namespace IsoBoiler
         public static async Task RunBasicWithServices(Action<HostBuilderContext, IServiceCollection> configureDelegate)
         {
 
-            var host = new HostBuilder().ConfigureFunctionsWorkerDefaults()
+            var host = new HostBuilder().ConfigureFunctionsWorkerDefaults() //Is inside AddConfiguration() as well. Changes here need to be made there.
                                         .AddDefaultJsonSerializerOptions()
                                         .AddApplicationInsights()
                                         .AddLogBoiler()
