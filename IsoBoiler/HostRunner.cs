@@ -13,23 +13,28 @@ namespace IsoBoiler
         /// </summary>
         /// <param name="configurationFilter"></param>
         /// <returns></returns>
-        public static StoredConfigurationFilter UseConfigurationFilter(string configurationFilter)
+        public static StoredConfigurationOptions UseConfigurationFilter(string configurationFilter)
         {
-            return new StoredConfigurationFilter() { Value = configurationFilter };
+            return new StoredConfigurationOptions() { Filter = configurationFilter };
         }
 
-        public static async Task RunWithServices(this StoredConfigurationFilter configurationFilterObject, Action<HostBuilderContext, IServiceCollection> configureDelegate)
+        public static StoredConfigurationOptions UseConfigurationSnapshot(string snapshotName)
         {
-            if (string.IsNullOrWhiteSpace(Environment.GetEnvironmentVariable("AppConfigurationConnectionString")))
+            return new StoredConfigurationOptions() { Snapshot = snapshotName };
+        }        
+
+        public static async Task RunWithServices(this StoredConfigurationOptions storedConfigurationOptions, Action<HostBuilderContext, IServiceCollection> configureDelegate)
+        {
+            if (string.IsNullOrWhiteSpace(Environment.GetEnvironmentVariable(Constants.APP_CONFIG_ENDPOINT)))
             {
-                throw new InvalidOperationException("You must have an Environment Variable named: 'AppConfigurationConnectionString' in order to use AddInitialConfiguration().");
+                throw new InvalidOperationException($"You must have an Environment Variable named: '{Constants.APP_CONFIG_ENDPOINT}' in order to use RunWithServices(). 'AppConfigurationConnectionString' has been deprecated.");
             }
 
             var host = new HostBuilder().ConfigureFunctionsWorkerDefaults()
                                         .AddDefaultJsonSerializerOptions()
                                         .AddApplicationInsights()
                                         .AddLogBoiler()
-                                        .AddConfiguration(configurationFilterObject.Value)
+                                        .AddConfiguration(storedConfigurationOptions)
                                         .ConfigureServices(configureDelegate)
                                         .Build();
 
@@ -38,9 +43,9 @@ namespace IsoBoiler
 
         public static async Task RunWithServices(Action<HostBuilderContext, IServiceCollection> configureDelegate)
         {
-            if (string.IsNullOrWhiteSpace(Environment.GetEnvironmentVariable("AppConfigurationConnectionString")))
+            if (string.IsNullOrWhiteSpace(Environment.GetEnvironmentVariable(Constants.APP_CONFIG_ENDPOINT)))
             {
-                throw new InvalidOperationException("You must have an Environment Variable named: 'AppConfigurationConnectionString' in order to use AddInitialConfiguration().");
+                throw new InvalidOperationException($"You must have an Environment Variable named: '{Constants.APP_CONFIG_ENDPOINT}' in order to use RunWithServices(). 'AppConfigurationConnectionString' has been deprecated.");
             }
 
             var host = new HostBuilder().ConfigureFunctionsWorkerDefaults()
@@ -68,8 +73,10 @@ namespace IsoBoiler
         }
     }
 
-    public class StoredConfigurationFilter
+    public class StoredConfigurationOptions
     {
-        public string Value { get; set; }
+        public string Filter { get; set; } = string.Empty;
+        public string Snapshot { get; set; } = string.Empty;
     }
+
 }
