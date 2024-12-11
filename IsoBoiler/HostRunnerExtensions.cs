@@ -20,31 +20,31 @@ namespace IsoBoiler
         /// </summary>
         /// <param name="configurationFilter"></param>
         /// <returns></returns>
-        public static StoredConfigurationOptions UseConfigurationFilter(this StoredConfigurationOptions storedConfigurationOptions, string configurationFilter)
+        public static IsoBoilerOptions UseConfigurationFilter(this IsoBoilerOptions storedConfigurationOptions, string configurationFilter)
         {
-            if (!string.IsNullOrWhiteSpace(storedConfigurationOptions.Filter))
+            if (!string.IsNullOrWhiteSpace(storedConfigurationOptions.ConfigurationFilter))
             {
                 throw new InvalidOperationException("A Filter value is already set for your StoredConfigurationOptions");
             }
 
-            storedConfigurationOptions.Filter = configurationFilter;
+            storedConfigurationOptions.ConfigurationFilter = configurationFilter;
 
             return storedConfigurationOptions;
         }
 
-        public static StoredConfigurationOptions UseConfigurationSnapshot(this StoredConfigurationOptions storedConfigurationOptions, string snapshotName)
+        public static IsoBoilerOptions UseConfigurationSnapshot(this IsoBoilerOptions storedConfigurationOptions, string snapshotName)
         {
-            if (!string.IsNullOrWhiteSpace(storedConfigurationOptions.Snapshot))
+            if (!string.IsNullOrWhiteSpace(storedConfigurationOptions.ConfigurationSnapshot))
             {
                 throw new InvalidOperationException("A Snapshot value is already set for your StoredConfigurationOptions");
             }
 
-            storedConfigurationOptions.Snapshot = snapshotName;
+            storedConfigurationOptions.ConfigurationSnapshot = snapshotName;
 
             return storedConfigurationOptions;
         }
 
-        public static IHostBuilder AddConfiguration(this IHostBuilder iHostBuilder, StoredConfigurationOptions? storedConfigurationOptions = null)
+        public static IHostBuilder AddConfiguration(this IHostBuilder iHostBuilder, IsoBoilerOptions? storedConfigurationOptions = null)
         {
             var appConfigEndpoint = Environment.GetEnvironmentVariable(Constants.APP_CONFIG_ENDPOINT);
 
@@ -58,8 +58,8 @@ namespace IsoBoiler
 
             if (storedConfigurationOptions is not null)
             {
-                configurationFilter = storedConfigurationOptions.Filter;
-                configurationSnapshot = storedConfigurationOptions.Snapshot;
+                configurationFilter = storedConfigurationOptions.ConfigurationFilter;
+                configurationSnapshot = storedConfigurationOptions.ConfigurationSnapshot;
             }
 
             //Default Filter
@@ -193,6 +193,16 @@ namespace IsoBoiler
         public static TServiceType GetService<TServiceType>(this IServiceCollection services)
         {
             var service = services.BuildServiceProvider().GetService<TServiceType>();
+            if (service == null)
+            {
+                throw new InvalidOperationException($"Service type was not found in the IServicesCollection");
+            }
+
+            return service;
+        }
+        public static TConfiguration GetConfig<TConfiguration>(this IServiceCollection services)
+        {
+            var service = services.BuildServiceProvider().GetService<TConfiguration>();
             if (service == null)
             {
                 throw new InvalidOperationException($"Service type was not found in the IServicesCollection");

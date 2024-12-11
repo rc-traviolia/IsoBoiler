@@ -15,17 +15,37 @@ namespace IsoBoiler
         /// </summary>
         /// <param name="configurationFilter"></param>
         /// <returns></returns>
-        public static StoredConfigurationOptions UseConfigurationFilter(string configurationFilter)
+        public static IsoBoilerOptions UseConfigurationFilter(string configurationFilter)
         {
-            return new StoredConfigurationOptions() { Filter = configurationFilter };
+            return new IsoBoilerOptions() { ConfigurationFilter = configurationFilter };
+        }
+        public static IsoBoilerOptions UseConfigurationFilter(this IsoBoilerOptions optionsToExtend, string configurationFilter)
+        {
+            optionsToExtend.ConfigurationFilter = configurationFilter;
+            return optionsToExtend;
         }
 
-        public static StoredConfigurationOptions UseConfigurationSnapshot(string snapshotName)
+        public static IsoBoilerOptions UseConfigurationSnapshot(string snapshotName)
         {
-            return new StoredConfigurationOptions() { Snapshot = snapshotName };
-        }        
+            return new IsoBoilerOptions() { ConfigurationSnapshot = snapshotName };
+        }
+        public static IsoBoilerOptions UseConfigurationSnapshot(this IsoBoilerOptions optionsToExtend, string snapshotName)
+        {
+            optionsToExtend.ConfigurationSnapshot = snapshotName;
+            return optionsToExtend;
+        }
 
-        public static async Task RunWithServices(this StoredConfigurationOptions storedConfigurationOptions, Action<HostBuilderContext, IServiceCollection> configureDelegate)
+        public static IsoBoilerOptions UseOpenApi()
+        {
+            return new IsoBoilerOptions() { UseOpenApi = true };
+        }
+        public static IsoBoilerOptions UseOpenApi(this IsoBoilerOptions optionsToExtend)
+        {
+            optionsToExtend.UseOpenApi = true;
+            return optionsToExtend;
+        }
+
+        public static async Task RunWithServices(this IsoBoilerOptions storedConfigurationOptions, Action<HostBuilderContext, IServiceCollection> configureDelegate)
         {
             if (string.IsNullOrWhiteSpace(Environment.GetEnvironmentVariable(Constants.APP_CONFIG_ENDPOINT)))
             {
@@ -73,10 +93,11 @@ namespace IsoBoiler
         }
     }
 
-    public class StoredConfigurationOptions
+    public class IsoBoilerOptions
     {
-        public string Filter { get; set; } = string.Empty;
-        public string Snapshot { get; set; } = string.Empty;
+        public string ConfigurationFilter { get; set; } = string.Empty;
+        public string ConfigurationSnapshot { get; set; } = string.Empty;
+        public bool UseOpenApi { get; set; } = false;
     }
 
 }
