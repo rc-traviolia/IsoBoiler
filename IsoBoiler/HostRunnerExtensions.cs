@@ -44,6 +44,12 @@ namespace IsoBoiler
             return storedConfigurationOptions;
         }
 
+        //public static IsoBoilerOptions UseOpenApi(this IsoBoilerOptions optionsToExtend)
+        //{
+        //    optionsToExtend.UseOpenApi = true;
+        //    return optionsToExtend;
+        //}
+
         public static IHostBuilder AddConfiguration(this IHostBuilder iHostBuilder, IsoBoilerOptions? storedConfigurationOptions = null)
         {
             var appConfigEndpoint = Environment.GetEnvironmentVariable(Constants.APP_CONFIG_ENDPOINT);

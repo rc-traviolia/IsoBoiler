@@ -1,8 +1,5 @@
-﻿using IsoBoiler.Logging;
-using Microsoft.Extensions.Configuration;
-using Microsoft.Extensions.DependencyInjection;
+﻿using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
-using Microsoft.FeatureManagement;
 
 namespace IsoBoiler
 {
@@ -35,15 +32,11 @@ namespace IsoBoiler
             return optionsToExtend;
         }
 
-        public static IsoBoilerOptions UseOpenApi()
-        {
-            return new IsoBoilerOptions() { UseOpenApi = true };
-        }
-        public static IsoBoilerOptions UseOpenApi(this IsoBoilerOptions optionsToExtend)
-        {
-            optionsToExtend.UseOpenApi = true;
-            return optionsToExtend;
-        }
+        //public static IsoBoilerOptions UseOpenApi()
+        //{
+        //    return new IsoBoilerOptions() { UseOpenApi = true };
+        //}
+
 
         public static async Task RunWithServices(this IsoBoilerOptions storedConfigurationOptions, Action<HostBuilderContext, IServiceCollection> configureDelegate)
         {
@@ -97,7 +90,6 @@ namespace IsoBoiler
     {
         public string ConfigurationFilter { get; set; } = string.Empty;
         public string ConfigurationSnapshot { get; set; } = string.Empty;
-        public bool UseOpenApi { get; set; } = false;
     }
 
 }
