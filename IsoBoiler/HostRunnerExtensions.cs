@@ -71,7 +71,7 @@ namespace IsoBoiler
             //Default Filter
             if (string.IsNullOrWhiteSpace(configurationFilter))
             {
-                configurationFilter = Assembly.GetEntryAssembly().GetName().Name.Contains('.') ? Assembly.GetEntryAssembly().GetName().Name.Split('.').Last() : Assembly.GetEntryAssembly().GetName().Name;
+                configurationFilter = Assembly.GetEntryAssembly()!.GetName()!.Name!.Contains('.') ? Assembly.GetEntryAssembly()!.GetName()!.Name!.Split('.').Last() : Assembly.GetEntryAssembly()!.GetName()!.Name!;
                 if (string.IsNullOrWhiteSpace(configurationFilter))
                 {
                     throw new InvalidOperationException("There was an error automatically creating your configurationFilter for the Azure App Configuration. Please provide one by using HostRunner.UseConfigurationFilter(string configurationFilter)");
@@ -92,7 +92,7 @@ namespace IsoBoiler
                                .ConfigureRefresh(refreshOptions =>
                                {
                                    refreshOptions.Register($"{configurationFilter}:Sentinel", refreshAll: true)
-                                                 .SetCacheExpiration(TimeSpan.FromSeconds(30)); //Default value is 30
+                                                 .SetRefreshInterval(TimeSpan.FromSeconds(30)); //Default value is 30
                                });
                     });
                 })
@@ -124,7 +124,7 @@ namespace IsoBoiler
                                .ConfigureRefresh(refreshOptions =>
                                {
                                    refreshOptions.Register($"{configurationFilter}:Sentinel", refreshAll: true)
-                                                 .SetCacheExpiration(TimeSpan.FromSeconds(30)); //Default value is 30
+                                                 .SetRefreshInterval(TimeSpan.FromSeconds(30)); //Default value is 30
                                });
                     });
                 })
