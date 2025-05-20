@@ -2,14 +2,21 @@
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Options;
+using System.Reflection;
 
 namespace IsoBoiler.Testing
 {
     public static class ConfigHelper
     {
-        public static IConfiguration BuildConfiguration(string configurationUri, string configurationFilter, string? configurationSnapshot = null)
+        public static IConfiguration BuildConfiguration(string configurationUri, string? configurationFilter = null, string? configurationSnapshot = null)
         {
-            if(configurationSnapshot is null)
+            if (configurationFilter is null)
+            {
+                //.SkipLast(1) skips the typical .Tests suffix, for projects where that nomenclature is used. 
+                configurationFilter = Assembly.GetEntryAssembly()!.GetName()!.Name!.Contains('.') ? Assembly.GetEntryAssembly()!.GetName()!.Name!.Split('.').SkipLast(1).Last() : Assembly.GetEntryAssembly()!.GetName()!.Name!;
+            }
+
+            if (configurationSnapshot is null)
             {
                 return new ConfigurationBuilder()
                 .AddAzureAppConfiguration(options =>
@@ -27,6 +34,7 @@ namespace IsoBoiler.Testing
             }
             else
             {
+
                 return new ConfigurationBuilder()
                 .AddAzureAppConfiguration(options =>
                 {
@@ -42,15 +50,23 @@ namespace IsoBoiler.Testing
                 })
                 .Build();
             }
-            
         }
 
-        public static IOptionsSnapshot<TSettingsModel> GetSettings<TSettingsModel>(this IConfiguration configuration, string configurationSection) where TSettingsModel : class, new()
+        public static TSettingsModel GetSettings<TSettingsModel>(this IConfiguration configuration, string configurationSection) where TSettingsModel : class, new()
         {
             var services = new ServiceCollection();
             services.Configure<TSettingsModel>(configuration.GetSection(configurationSection));
             var provider = services.BuildServiceProvider();
-            return provider.GetRequiredService<IOptionsSnapshot<TSettingsModel>>();
+            return provider.GetRequiredService<IOptionsSnapshot<TSettingsModel>>().Value;
+        }
+
+        public static TSettingsModel GetSettings<TSettingsModel>(string configurationUri, string configurationSection) where TSettingsModel : class, new()
+        {
+            var configuration = BuildConfiguration(configurationUri, configurationSection);
+            var services = new ServiceCollection();
+            services.Configure<TSettingsModel>(configuration.GetSection(configurationSection));
+            var provider = services.BuildServiceProvider();
+            return provider.GetRequiredService<IOptionsSnapshot<TSettingsModel>>().Value;
         }
     }
 }
