@@ -1,2 +1,0 @@
-# IsoBoiler
-This package makes basic configuration of Azure Function Apps (isolated) easier. Just call AddInitialConfiguration to connect to your AppConfigurationConnectionString and set up AppInsights for your ILogger.
