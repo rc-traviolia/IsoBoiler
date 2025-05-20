@@ -13,7 +13,7 @@ namespace IsoBoiler.Testing
             if (configurationFilter is null)
             {
                 //.SkipLast(1) skips the typical .Tests suffix, for projects where that nomenclature is used. 
-                configurationFilter = Assembly.GetEntryAssembly()!.GetName()!.Name!.Contains('.') ? Assembly.GetEntryAssembly()!.GetName()!.Name!.Split('.').SkipLast(1).Last() : Assembly.GetEntryAssembly()!.GetName()!.Name!;
+                configurationFilter = Assembly.GetExecutingAssembly()!.GetName()!.Name!.Contains('.') ? Assembly.GetExecutingAssembly()!.GetName()!.Name!.Split('.').SkipLast(1).Last() : Assembly.GetExecutingAssembly()!.GetName()!.Name!;
             }
 
             if (configurationSnapshot is null)
