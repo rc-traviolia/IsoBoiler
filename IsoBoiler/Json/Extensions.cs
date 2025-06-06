@@ -2,7 +2,7 @@
 
 namespace IsoBoiler.Json
 {
-    public static class Json
+    public static class Extensions
     {
         public static JsonSerializerOptions DefaultSerializerOptions = new JsonSerializerOptions() { WriteIndented = true, PropertyNameCaseInsensitive = true, PropertyNamingPolicy = JsonNamingPolicy.CamelCase};
 
@@ -31,6 +31,10 @@ namespace IsoBoiler.Json
         }
 
         public static TModel Deserialize<TModel>(this string stream, JsonSerializerOptions? jsonSerializerOptions)
+        {
+            return JsonSerializer.Deserialize<TModel>(stream, jsonSerializerOptions ?? DefaultSerializerOptions) ?? throw new JsonException("Failed to deserialize object");
+        }
+        public static TModel Deserialize<TModel>(this Stream stream, JsonSerializerOptions? jsonSerializerOptions)
         {
             return JsonSerializer.Deserialize<TModel>(stream, jsonSerializerOptions ?? DefaultSerializerOptions) ?? throw new JsonException("Failed to deserialize object");
         }
