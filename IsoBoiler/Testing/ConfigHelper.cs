@@ -78,5 +78,15 @@ namespace IsoBoiler.Testing
 
             return host.Services.GetRequiredService<IServiceProvider>();
         }
+
+        public static IServiceProvider GetServiceProvider(Action<HostBuilderContext, IServiceCollection> configureDelegate)
+        {
+            var host = new HostBuilder().ConfigureFunctionsWorkerDefaults()
+                                        .AddDefaultJsonSerializerOptions()
+                                        .ConfigureServices(configureDelegate)
+                                        .Build();
+
+            return host.Services.GetRequiredService<IServiceProvider>();
+        }
     }
 }
