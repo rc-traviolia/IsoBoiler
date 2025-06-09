@@ -61,6 +61,15 @@ var serviceProvider = ConfigHelper.GetServiceProvider((context, services) =>
     services.Configure<AppSettings>(context.Configuration.GetSection("MyProjectName:AppSettings"));
     services.AddScoped<IMyService, MyService>();
 });
+
+//UseJsonAsConfiguration lets you provide configuration values as a string prior to creating your ServiceProvider.
+var myConnectionString = "Server=myserver;Database=mydb;User Id=myuser;Password=mypassword;";
+var appSettingsJson = $"{{\r\n  \"AppSettings\": {{\r\n    \"MyConnectionString\": \"{myConnectionString}\"\r\n  }}\r\n}}";
+var serviceProvider = ConfigHelper.UseJsonAsConfiguration(appSettingsJson).GetServiceProvider((context, services) =>
+{
+    services.Configure<AppSettings>(context.Configuration.GetSection("AppSettings"));
+});
+var injectedAppSettings = serviceProvider.GetService<IOptionsSnapshot<AppSettings>>()!.Value;
 ```
 
 ## Using <code>MemoryCache.Extensions.cs</code>:

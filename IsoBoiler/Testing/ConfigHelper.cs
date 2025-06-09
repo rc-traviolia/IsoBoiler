@@ -100,7 +100,7 @@ namespace IsoBoiler.Testing
 
         public static IServiceProvider GetServiceProvider(this IHostBuilder hostBuilder, Action<HostBuilderContext, IServiceCollection> configureDelegate)
         {
-            var host = new HostBuilder().ConfigureFunctionsWorkerDefaults()
+            var host = hostBuilder.ConfigureFunctionsWorkerDefaults()
                                         .AddDefaultJsonSerializerOptions()
                                         .ConfigureServices(configureDelegate)
                                         .Build();
