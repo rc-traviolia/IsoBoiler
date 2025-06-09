@@ -54,6 +54,13 @@ var appSettings = ConfigHelper.GetSettings<AppSettings>("https://appcs-myappconf
 
 //Get the default service provider. This can be useful to get the default configured services, such as IObjectSerializer
 var defaultServiceProvider = ConfigHelper.GetDefaultServiceProvider();
+
+//Get a service provider with a custom configuration delegate so you can register services. May be useful when testing Dependency Injection
+var serviceProvider = ConfigHelper.GetServiceProvider((context, services) =>
+{
+    services.Configure<AppSettings>(context.Configuration.GetSection("MyProjectName:AppSettings"));
+    services.AddScoped<IMyService, MyService>();
+});
 ```
 
 ## Using <code>MemoryCache.Extensions.cs</code>:

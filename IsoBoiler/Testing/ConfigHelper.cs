@@ -4,6 +4,7 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Options;
 using System.Reflection;
+using System.Text;
 
 namespace IsoBoiler.Testing
 {
@@ -88,5 +89,24 @@ namespace IsoBoiler.Testing
 
             return host.Services.GetRequiredService<IServiceProvider>();
         }
+
+        public static IHostBuilder UseJsonAsConfiguration(string json)
+        {
+            return new HostBuilder().ConfigureAppConfiguration(config =>
+            {
+                config.AddJsonStream(new MemoryStream(Encoding.UTF8.GetBytes(json)));
+            });
+        }
+
+        public static IServiceProvider GetServiceProvider(this IHostBuilder hostBuilder, Action<HostBuilderContext, IServiceCollection> configureDelegate)
+        {
+            var host = new HostBuilder().ConfigureFunctionsWorkerDefaults()
+                                        .AddDefaultJsonSerializerOptions()
+                                        .ConfigureServices(configureDelegate)
+                                        .Build();
+
+            return host.Services.GetRequiredService<IServiceProvider>();
+        }
+
     }
 }
