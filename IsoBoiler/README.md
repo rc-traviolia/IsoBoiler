@@ -51,6 +51,9 @@ var appSettings = configuration.GetSettings<AppSettings>("Packing:AppSettings");
 
 //All-in-one method to get settings (builds configuration within)
 var appSettings = ConfigHelper.GetSettings<AppSettings>("https://appcs-myappconfigresource-env.azconfig.io", "Packing:AppSettings");
+
+//Get the default service provider. This can be useful to get the default configured services, such as IObjectSerializer
+var defaultServiceProvider = ConfigHelper.GetDefaultServiceProvider();
 ```
 
 ## Using <code>MemoryCache.Extensions.cs</code>:
