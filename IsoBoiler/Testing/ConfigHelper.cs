@@ -1,6 +1,7 @@
 ﻿using Azure.Identity;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Options;
 using System.Reflection;
 
@@ -67,6 +68,15 @@ namespace IsoBoiler.Testing
             services.Configure<TSettingsModel>(configuration.GetSection(configurationSection));
             var provider = services.BuildServiceProvider();
             return provider.GetRequiredService<IOptionsSnapshot<TSettingsModel>>().Value;
+        }
+
+        public static IServiceProvider GetDefaultServiceProvider()
+        {
+            var host = new HostBuilder().ConfigureFunctionsWorkerDefaults()
+                                        .AddDefaultJsonSerializerOptions()
+                                        .Build();
+
+            return host.Services.GetRequiredService<IServiceProvider>();
         }
     }
 }

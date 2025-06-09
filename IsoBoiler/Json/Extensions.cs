@@ -30,16 +30,16 @@ namespace IsoBoiler.Json
             return objectToSerialize.Serialize(jsonSerializerOptions);
         }
 
-        public static TModel Deserialize<TModel>(this string stream, JsonSerializerOptions? jsonSerializerOptions)
+        public static TModel Deserialize<TModel>(this string stream, JsonSerializerOptions? jsonSerializerOptions = null)
         {
             return JsonSerializer.Deserialize<TModel>(stream, jsonSerializerOptions ?? DefaultSerializerOptions) ?? throw new JsonException("Failed to deserialize object");
         }
-        public static TModel Deserialize<TModel>(this Stream stream, JsonSerializerOptions? jsonSerializerOptions)
+        public static TModel Deserialize<TModel>(this Stream stream, JsonSerializerOptions? jsonSerializerOptions = null)
         {
             return JsonSerializer.Deserialize<TModel>(stream, jsonSerializerOptions ?? DefaultSerializerOptions) ?? throw new JsonException("Failed to deserialize object");
         }
 
-        public static string Serialize<TModel>(this TModel model, JsonSerializerOptions? jsonSerializerOptions)
+        public static string Serialize<TModel>(this TModel model, JsonSerializerOptions? jsonSerializerOptions = null)
         {
             return JsonSerializer.Serialize(model, jsonSerializerOptions ?? DefaultSerializerOptions);
         }
