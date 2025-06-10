@@ -69,7 +69,7 @@ var serviceProvider = ConfigHelper.UseJsonAsConfiguration(appSettingsJson).GetSe
 {
     services.Configure<AppSettings>(context.Configuration.GetSection("AppSettings"));
 });
-var injectedAppSettings = serviceProvider.GetService<IOptionsSnapshot<AppSettings>>()!.Value;
+var injectedAppSettings = serviceProvider.GetRequiredService<IOptionsSnapshot<AppSettings>>()!.Value;
 ```
 
 ## Using <code>MemoryCache.Extensions.cs</code>:
