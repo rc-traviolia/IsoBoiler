@@ -4,7 +4,7 @@ namespace IsoBoiler.Json
 {
     public static class Extensions
     {
-        public static JsonSerializerOptions DefaultSerializerOptions = new JsonSerializerOptions() { WriteIndented = true, PropertyNameCaseInsensitive = true, PropertyNamingPolicy = JsonNamingPolicy.CamelCase};
+        public static JsonSerializerOptions DefaultSerializerOptions = new JsonSerializerOptions() { WriteIndented = true, PropertyNameCaseInsensitive = true, PropertyNamingPolicy = JsonNamingPolicy.CamelCase };
 
         /// <summary>
         /// This extension method exists for simplicity and readability. It's basically a rename & passthrough of <see cref="Deserialize{TModel}(string, JsonSerializerOptions?)"/>
