@@ -19,8 +19,37 @@ namespace IsoBoiler.Tests.Helpers
             _healthCheck = healthCheck;
         }
 
-        [Function("health")]
-        public async Task<HttpResponseData> Run([HttpTrigger(AuthorizationLevel.Function, "get")] HttpRequestData httpRequestData, FunctionContext functionContext)
+        [Function("DefaultGetFunction")]
+        public async Task<HttpResponseData> DefaultGetFunction([HttpTrigger(AuthorizationLevel.Function, "get")] HttpRequestData httpRequestData, FunctionContext functionContext)
+        {
+            using (_logger.BeginScope(functionContext))
+            {
+                var healthStatus = await _healthCheck.CheckHealthAsync();
+                var response = httpRequestData.CreateResponse();
+                await response.WriteAsJsonAsync(healthStatus);
+                return response;
+            }
+        }
+
+        [Function("GetFunction")]
+        public async Task<HttpResponseData> GetFunction([HttpTrigger(AuthorizationLevel.Function, "get")] HttpRequestData httpRequestData, FunctionContext functionContext)
+        {
+            using (_logger.BeginScope(functionContext))
+            {
+                var someHeaderValueOne = httpRequestData.GetHeaderValue("someHeaderValueOne");
+                var someHeaderValueTwo = httpRequestData.GetHeaderValue("someHeaderValueTwo");
+                var someQueryParameterOne = httpRequestData.Query["someQueryParameter1"];
+                var someQueryParameterTwo = httpRequestData.Query["someQueryParameter2"];
+
+                var healthStatus = await _healthCheck.CheckHealthAsync();
+                var response = httpRequestData.CreateResponse();
+                await response.WriteAsJsonAsync(healthStatus);
+                return response;
+            }
+        }
+
+        [Function("PostFunction")]
+        public async Task<HttpResponseData> PostFunction([HttpTrigger(AuthorizationLevel.Function, "post")] HttpRequestData httpRequestData, FunctionContext functionContext)
         {
             using (_logger.BeginScope(functionContext))
             {
@@ -34,7 +63,6 @@ namespace IsoBoiler.Tests.Helpers
                 await response.WriteAsJsonAsync(healthStatus);
                 return response;
             }
-
         }
     }
 }

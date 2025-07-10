@@ -1,4 +1,4 @@
-# IsoBoiler (8.1.14)
+# IsoBoiler (Last Updated For: 8.1.14)
 This package makes basic configuration of Azure Function Apps (isolated) easier. 
 
 ## Using <code>HostRunner.cs</code> within <code>Program.cs</code>

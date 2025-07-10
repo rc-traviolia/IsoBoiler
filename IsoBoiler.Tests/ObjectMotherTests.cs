@@ -193,7 +193,7 @@ namespace IsoBoiler.Tests
             var functionContextMock = Mock.Of<FunctionContext>();
 
             //Act
-            var action = async () => await health.Run(httpRequestDataMock, functionContextMock);
+            var action = async () => await health.PostFunction(httpRequestDataMock, functionContextMock);
 
             //Assert
             await action.Should().ThrowAsync<Exception>().WithMessage("simulated failure");
@@ -223,7 +223,7 @@ namespace IsoBoiler.Tests
             var functionContextMock = Mock.Of<FunctionContext>();
 
             //Act
-            var action = () => health.Run(httpRequestData, functionContextMock);
+            var action = () => health.PostFunction(httpRequestData, functionContextMock);
 
             //Assert
             await action.Should().NotThrowAsync<Exception>();
@@ -246,7 +246,7 @@ namespace IsoBoiler.Tests
             var functionContextMock = Mock.Of<FunctionContext>();
 
             //Act
-            var action = async () => await health.Run(httpRequestDataMock, functionContextMock);
+            var action = async () => await health.PostFunction(httpRequestDataMock, functionContextMock);
 
             //Assert
             await action.Should().ThrowAsync<Exception>().WithMessage("simulated failure");
