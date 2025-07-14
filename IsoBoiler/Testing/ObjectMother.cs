@@ -77,9 +77,7 @@ namespace IsoBoiler.Testing
 
         //This should be the final call to get the testable object
         public TServiceToTest GetObject() => ObjectMotherReference.With(DependencyOverride.Object).GetObject();
-
-
-        //
+        
         public PendingDependencyOverride<TServiceToTest, TDependency> Setup(Action<Mock<TDependency>> configure)
         {
             configure(DependencyOverride);

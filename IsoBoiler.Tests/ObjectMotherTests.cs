@@ -216,7 +216,8 @@ namespace IsoBoiler.Tests
                                                        .With(succesedingLogBoilerMockObject)
                                                        .GetObject();
 
-            var httpRequestData = HttpRequestDataMother.Birth().AddHeader("someHeaderValueOne", "value1")
+            var httpRequestData = HttpRequestDataMother.Birth().UseMethod(HttpMethod.Post)
+                                                               .AddHeader("someHeaderValueOne", "value1")
                                                                .AddHeader("someHeaderValueTwo", "value2")
                                                                .AddBody<ExampleRequest>()
                                                                .GetObject();

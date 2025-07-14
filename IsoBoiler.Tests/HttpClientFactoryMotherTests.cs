@@ -1,8 +1,8 @@
-﻿//namespace IsoBoiler.Tests
-//{
-//    public class HttpClientFactoryMotherTests
-//    {
+﻿namespace IsoBoiler.Tests
+{
+    public class HttpClientFactoryMotherTests
+    {
 
 
-//    }
-//}
+    }
+}

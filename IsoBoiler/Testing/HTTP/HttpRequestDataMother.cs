@@ -2,11 +2,9 @@
 using Microsoft.Azure.Functions.Worker;
 using Microsoft.Azure.Functions.Worker.Http;
 using Moq;
-using System.Diagnostics;
+using System.IO;
 using System.Net;
-using System.Reflection.PortableExecutable;
 using System.Security.Claims;
-using System.Security.Policy;
 
 namespace IsoBoiler.Testing.HTTP
 {
@@ -21,6 +19,7 @@ namespace IsoBoiler.Testing.HTTP
         {
             _httpMethod = httpMethod;
             headers = new HttpHeadersCollection();
+            memoryStream = new MemoryStream();
             queryParameters = new Dictionary<string, string>();
             httpRequestData = new TestHttpRequestData(_httpMethod.ToString(), headers, queryParameters);
         }
@@ -46,7 +45,7 @@ namespace IsoBoiler.Testing.HTTP
         }
         public HttpRequestDataMother AddBody(string jsonBodyValue)
         {
-            if(_httpMethod == HttpMethod.Get)
+            if (_httpMethod == HttpMethod.Get)
             {
                 throw new InvalidOperationException("You cannot include a Body in a GET request. Please change the method or do not try to use .AddBody()");
             }
@@ -102,7 +101,7 @@ namespace IsoBoiler.Testing.HTTP
         {
             //Add to the existing collection and to the private field, so that changes are persisted between new TestHttpRequestData
             //every time it a new one is constructed, this reference is used
-            headers.Add(key, value);    
+            headers.Add(key, value);
             return this;
         }
 
@@ -130,7 +129,7 @@ namespace IsoBoiler.Testing.HTTP
         private string _method = "GET";
         private static FunctionContext _functionContext = Mock.Of<FunctionContext>();
 
-        public TestHttpRequestData(string method, HttpHeadersCollection? headers, Dictionary<string,string> queryParameters) : base(_functionContext)
+        public TestHttpRequestData(string method, HttpHeadersCollection? headers, Dictionary<string, string> queryParameters) : base(_functionContext)
         {
             _method = method;
             Headers = headers ?? new HttpHeadersCollection();
@@ -148,6 +147,8 @@ namespace IsoBoiler.Testing.HTTP
             _method = method;
             _body = body;
             Headers = headers ?? new HttpHeadersCollection();
+            var urlString = "https://localhost/test";
+            _url = new Uri(urlString);
 
             var defaultServiceProvider = ConfigHelper.GetDefaultServiceProvider();
             var mockFunctionContext = new Mock<FunctionContext>();
