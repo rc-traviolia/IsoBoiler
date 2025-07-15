@@ -41,47 +41,21 @@ namespace IsoBoiler.Testing
             return this;
         }
 
-        public PendingDependencyOverride<TServiceToTest, TDependency> With<TDependency>() where TDependency : class
+        public ObjectMother<TServiceToTest> With<TDependency>(Action<Mock<TDependency>>? setupDelegate = null) where TDependency : class
         {
-            //Create a PendingDependencyOverride for the given TDependency type to allow Setup Methodes to be chained
-            return new PendingDependencyOverride<TServiceToTest, TDependency>(this);
+            if(setupDelegate is null)
+            {
+                return this.With(Mock.Of<TDependency>());
+            }
+            else
+            {
+                var dependencyMock = new Mock<TDependency>();
+                setupDelegate(dependencyMock);
+                return this.With(dependencyMock.Object);
+            }
         }
 
         //This should be the final call to get the testable object
         public TServiceToTest GetObject() => ActivatorUtilities.CreateInstance<TServiceToTest>(_serviceProvider, _serviceOverrides.ToArray());
-    }
-
-    public class PendingDependencyOverride<TServiceToTest, TDependency> where TDependency : class
-                                                                        where TServiceToTest : class
-    {
-        public ObjectMother<TServiceToTest> ObjectMotherReference { get; set; }
-        public Mock<TDependency> DependencyOverride { get; set; }
-        public PendingDependencyOverride(ObjectMother<TServiceToTest> objectMotherReference)
-        {
-            ObjectMotherReference = objectMotherReference;
-            DependencyOverride = new Mock<TDependency>();
-        }
-
-        public ObjectMother<TServiceToTest> With<TNewDependency>(TNewDependency dependency)
-        {
-            //Add this PendingDependencyOverride, and then execute the With() on the ObjectMother and return that reference
-            //So we can move back and forth between ObjectMother and PendingDependencyOverrides
-            return ObjectMotherReference.With(DependencyOverride.Object).With(dependency);
-        }
-
-        public PendingDependencyOverride<TServiceToTest, TNewDependency> With<TNewDependency>() where TNewDependency : class
-        {
-            //When beginning a new PendingDependencyOverride, we need to make sure this one was added to the ObjectMotherReference
-            return new PendingDependencyOverride<TServiceToTest, TNewDependency>(ObjectMotherReference.With(DependencyOverride.Object));
-        }
-
-        //This should be the final call to get the testable object
-        public TServiceToTest GetObject() => ObjectMotherReference.With(DependencyOverride.Object).GetObject();
-        
-        public PendingDependencyOverride<TServiceToTest, TDependency> Setup(Action<Mock<TDependency>> configure)
-        {
-            configure(DependencyOverride);
-            return this;
-        }
     }
 }

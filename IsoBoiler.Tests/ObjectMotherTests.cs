@@ -231,12 +231,11 @@ namespace IsoBoiler.Tests
         }
 
         [Fact]
-        public static async Task Setup_WithOverrideFailing_Fails()
+        public static async Task WithSetupDelegate_WithOverrideFailing_Fails()
         {
             //Arrange
             var health = ObjectMother<ExampleFunction>.Birth(ExampleDefaultServiceProviderBuilder.GetServiceProvider())
-                                             .With<ILogBoiler>()
-                                             .Setup(logBoilerMock =>
+                                             .With<ILogBoiler>(logBoilerMock =>
                                              {
                                                  logBoilerMock.Setup(lb => lb.BeginScope(It.IsAny<FunctionContext>()))
                                                               .Throws(new Exception("simulated failure"));

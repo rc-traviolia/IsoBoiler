@@ -172,6 +172,7 @@ namespace IsoBoiler.Testing.HTTP
             else
             {
                 //Add default 400 response for all other requests that are not matched
+                //MUST ADD FIRST. ADDING AFTER ANOTHER SETUP WILL OVERRIDE IT IF THE ItExpr MATCHES
                 if (Return404ForUnmappedRoutes)
                 {
                     var default404Message = new HttpResponseMessage
