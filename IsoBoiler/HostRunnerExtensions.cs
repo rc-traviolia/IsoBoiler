@@ -52,11 +52,11 @@ namespace IsoBoiler
 
         public static IHostBuilder AddConfiguration(this IHostBuilder iHostBuilder, IsoBoilerOptions? storedConfigurationOptions = null)
         {
-            var appConfigEndpoint = Environment.GetEnvironmentVariable(Constants.APP_CONFIG_ENDPOINT);
+            var appConfigEndpoint = Environment.GetEnvironmentVariable(Constants.AzureAppConfigurationPrimaryEndpoint);
 
             if (string.IsNullOrWhiteSpace(appConfigEndpoint))
             {
-                throw new InvalidOperationException($"You must have an Environment Variable named: '{Constants.APP_CONFIG_ENDPOINT}' in order to use RunWithServices(). 'AppConfigurationConnectionString' has been deprecated.");
+                throw new InvalidOperationException($"You must have an Environment Variable named: '{Constants.AzureAppConfigurationPrimaryEndpoint}' in order to use RunWithServices(). 'AppConfigurationConnectionString' has been deprecated.");
             }
 
             var configurationFilter = string.Empty;

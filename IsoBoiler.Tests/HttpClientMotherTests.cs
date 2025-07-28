@@ -278,5 +278,18 @@ namespace IsoBoiler.Tests
             response3.StatusCode.Should().Be(HttpStatusCode.NotFound);
 
         }
+
+        [Fact]
+        public void DefaultRequestHeaders_OnGeneratedObject_DoesNotError()
+        {
+            // Arrange
+            var httpClient = HttpClientMother.Birth().AlwaysRespondWith(HttpStatusCode.OK).GetObject();
+
+            //Act
+            var action = () => httpClient.DefaultRequestHeaders.Add("headerKey", "headerValue");
+
+            //Assert
+            action.Should().NotThrow<Exception>();
+        }
     }
 }

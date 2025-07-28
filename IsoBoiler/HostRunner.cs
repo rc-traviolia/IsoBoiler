@@ -40,9 +40,9 @@ namespace IsoBoiler
 
         public static async Task RunWithServices(this IsoBoilerOptions storedConfigurationOptions, Action<HostBuilderContext, IServiceCollection> configureDelegate)
         {
-            if (string.IsNullOrWhiteSpace(Environment.GetEnvironmentVariable(Constants.APP_CONFIG_ENDPOINT)))
+            if (string.IsNullOrWhiteSpace(Environment.GetEnvironmentVariable(Constants.AzureAppConfigurationPrimaryEndpoint)))
             {
-                throw new InvalidOperationException($"You must have an Environment Variable named: '{Constants.APP_CONFIG_ENDPOINT}' in order to use RunWithServices(). 'AppConfigurationConnectionString' has been deprecated.");
+                throw new InvalidOperationException($"You must have an Environment Variable named: '{Constants.AzureAppConfigurationPrimaryEndpoint}' in order to use RunWithServices(). 'AppConfigurationConnectionString' has been deprecated.");
             }
 
             var host = new HostBuilder().AddDefaultJsonSerializerOptions()
@@ -57,9 +57,9 @@ namespace IsoBoiler
 
         public static async Task RunWithServices(Action<HostBuilderContext, IServiceCollection> configureDelegate)
         {
-            if (string.IsNullOrWhiteSpace(Environment.GetEnvironmentVariable(Constants.APP_CONFIG_ENDPOINT)))
+            if (string.IsNullOrWhiteSpace(Environment.GetEnvironmentVariable(Constants.AzureAppConfigurationPrimaryEndpoint)))
             {
-                throw new InvalidOperationException($"You must have an Environment Variable named: '{Constants.APP_CONFIG_ENDPOINT}' in order to use RunWithServices(). 'AppConfigurationConnectionString' has been deprecated.");
+                throw new InvalidOperationException($"You must have an Environment Variable named: '{Constants.AzureAppConfigurationPrimaryEndpoint}' in order to use RunWithServices(). 'AppConfigurationConnectionString' has been deprecated.");
             }
 
             var host = new HostBuilder().AddDefaultJsonSerializerOptions()
