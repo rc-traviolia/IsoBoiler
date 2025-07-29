@@ -33,5 +33,23 @@ namespace IsoBoiler.Utilities
             response.StatusCode = statusCode;
             return response;
         }
+        public static async Task<HttpResponseData> CreateResponse<TJsonSerializableClass>(this HttpRequestData requestData, TJsonSerializableClass jsonSerializableClass, HttpStatusCode? statusCode = null)
+        {
+            var response = requestData.CreateResponse();
+
+            if (jsonSerializableClass is Exception)
+            {
+                var exception = jsonSerializableClass as Exception;
+                await response.WriteStringAsync(exception!.Message);
+                response.StatusCode = statusCode ?? HttpStatusCode.InternalServerError;
+            }
+            else
+            {
+                await response.WriteAsJsonAsync(jsonSerializableClass);
+                response.StatusCode = statusCode ?? HttpStatusCode.OK;
+            }
+
+            return response;
+        }
     }
 }
