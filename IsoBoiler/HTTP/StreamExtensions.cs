@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace IsoBoiler.Streams
+namespace IsoBoiler.Http
 {
     public static class StreamExtensions
     {

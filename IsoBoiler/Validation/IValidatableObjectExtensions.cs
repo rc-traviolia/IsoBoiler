@@ -1,7 +1,7 @@
 ﻿using IsoBoiler.Json;
 using System.ComponentModel.DataAnnotations;
 
-namespace IsoBoiler.Utilities
+namespace IsoBoiler.Validation
 {
     public static class IValidatableObjectExtensions
     {

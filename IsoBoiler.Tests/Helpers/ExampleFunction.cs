@@ -1,7 +1,6 @@
-﻿using IsoBoiler.Json;
+﻿using IsoBoiler.Http;
+using IsoBoiler.Json;
 using IsoBoiler.Logging;
-using IsoBoiler.Streams;
-using IsoBoiler.Utilities;
 using Microsoft.Azure.Functions.Worker;
 using Microsoft.Azure.Functions.Worker.Http;
 using Microsoft.Extensions.Diagnostics.HealthChecks;

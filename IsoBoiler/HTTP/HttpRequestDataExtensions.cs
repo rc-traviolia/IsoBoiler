@@ -1,9 +1,9 @@
 ﻿using Microsoft.Azure.Functions.Worker.Http;
 using System.Net;
 
-namespace IsoBoiler.Utilities
+namespace IsoBoiler.Http
 {
-    public static class HttpExtensions
+    public static class HttpRequestDataExtensions
     {
         public static string GetHeaderValue(this HttpRequestData httpRequestData, string headerKey)
         {
@@ -19,20 +19,6 @@ namespace IsoBoiler.Utilities
             }
         }
 
-        public static async Task<HttpResponseData> CreateResponse<TJsonSerializableClass>(this HttpRequestData requestData, TJsonSerializableClass jsonSerializableClass, HttpStatusCode statusCode = HttpStatusCode.OK)
-        {
-            var response = requestData.CreateResponse();
-            await response.WriteAsJsonAsync(jsonSerializableClass);
-            response.StatusCode = statusCode;
-            return response;
-        }
-        public static async Task<HttpResponseData> CreateResponse(this HttpRequestData requestData, Exception exception, HttpStatusCode statusCode = HttpStatusCode.InternalServerError)
-        {
-            var response = requestData.CreateResponse();
-            await response.WriteStringAsync(exception.Message);
-            response.StatusCode = statusCode;
-            return response;
-        }
         public static async Task<HttpResponseData> CreateResponse<TJsonSerializableClass>(this HttpRequestData requestData, TJsonSerializableClass jsonSerializableClass, HttpStatusCode? statusCode = null)
         {
             var response = requestData.CreateResponse();
