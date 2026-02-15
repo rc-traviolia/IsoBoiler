@@ -1,10 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace IsoBoiler.Tests.Helpers
+﻿namespace IsoBoiler.Tests.Helpers
 {
     public class ExampleResponse
     {

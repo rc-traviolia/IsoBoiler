@@ -9,10 +9,10 @@ namespace IsoBoiler.Tests.Helpers
 {
     public class ExampleFunction
     {
-        private readonly ILogBoiler _logger;
+        private readonly ILog _logger;
         private readonly HealthCheckService _healthCheck;
 
-        public ExampleFunction(ILogBoiler logger, HealthCheckService healthCheck)
+        public ExampleFunction(ILog logger, HealthCheckService healthCheck)
         {
             _logger = logger;
             _healthCheck = healthCheck;

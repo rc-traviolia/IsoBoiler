@@ -2,7 +2,6 @@
 using IsoBoiler.Json;
 using IsoBoiler.Testing.HTTP;
 using IsoBoiler.Tests.Helpers;
-using System;
 using System.Net;
 
 namespace IsoBoiler.Tests
@@ -122,8 +121,8 @@ namespace IsoBoiler.Tests
         {
             // Arrange
             var headersToAdd = new List<KeyValuePair<string, string>>()
-            { 
-                new KeyValuePair<string, string>("Header-Key1", "Header/Value2"), 
+            {
+                new KeyValuePair<string, string>("Header-Key1", "Header/Value2"),
                 new KeyValuePair<string, string>("Header-Key3", "Header/Value4")
             };
 
@@ -159,7 +158,7 @@ namespace IsoBoiler.Tests
             // Arrange
             //Act
             var action = () => HttpClientMother.Birth()
-                                               .AddSpecificResponse("someroute", HttpMethod.Get, HttpStatusCode.OK)              
+                                               .AddSpecificResponse("someroute", HttpMethod.Get, HttpStatusCode.OK)
                                                .AlwaysRespondWith(HttpStatusCode.OK);
 
             //Assert

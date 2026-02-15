@@ -34,7 +34,7 @@ namespace IsoBoiler.Tests
             //Act
             var action = () => ObjectMother<ExampleFunction>.Birth((context, services) => { /* empty for testing*/ })
                                                    .With(Mock.Of<HealthCheckService>())
-                                                   .With(Mock.Of<ILogBoiler>())
+                                                   .With(Mock.Of<ILog>())
                                                    .GetObject();
             //Assert
             action.Should().NotThrow<Exception>();
@@ -45,7 +45,7 @@ namespace IsoBoiler.Tests
         {
             //Arrange
             var healthCheckServiceMock = Mock.Of<HealthCheckService>();
-            var logBoilerMock = Mock.Of<ILogBoiler>();
+            var logBoilerMock = Mock.Of<ILog>();
 
             //Act
             var action = () => ObjectMother<ExampleFunction>.Birth((context, services) => { /* empty for testing*/ })
@@ -61,12 +61,12 @@ namespace IsoBoiler.Tests
         {
             //Arrange
             var healthCheckServiceMock = Mock.Of<HealthCheckService>();
-            var logBoilerMock = Mock.Of<ILogBoiler>();
+            var logBoilerMock = Mock.Of<ILog>();
 
             //Act
             var action = () => ObjectMother<ExampleFunction>.Birth((context, services) => { /* empty for testing*/ })
                                                    .With<HealthCheckService>()
-                                                   .With<ILogBoiler>()
+                                                   .With<ILog>()
                                                    .GetObject();
             //Assert
             action.Should().NotThrow<Exception>();
@@ -77,7 +77,7 @@ namespace IsoBoiler.Tests
         {
             //Arrange
             var healthCheckServiceMockObject = Mock.Of<HealthCheckService>();
-            var logBoilerMockObject = Mock.Of<ILogBoiler>();
+            var logBoilerMockObject = Mock.Of<ILog>();
 
             //Act
             var action11 = () => ObjectMother<ExampleFunction>.Birth((context, services) => { /* empty for testing*/ })
@@ -86,11 +86,11 @@ namespace IsoBoiler.Tests
                                                      .GetObject();
             var action12 = () => ObjectMother<ExampleFunction>.Birth((context, services) => { /* empty for testing*/ })
                                                      .With(healthCheckServiceMockObject)
-                                                     .With<ILogBoiler>()
+                                                     .With<ILog>()
                                                      .GetObject();
             var action13 = () => ObjectMother<ExampleFunction>.Birth((context, services) => { /* empty for testing*/ })
                                                      .With(healthCheckServiceMockObject)
-                                                     .With(Mock.Of<ILogBoiler>())
+                                                     .With(Mock.Of<ILog>())
                                                      .GetObject();
 
             var action21 = () => ObjectMother<ExampleFunction>.Birth((context, services) => { /* empty for testing*/ })
@@ -99,11 +99,11 @@ namespace IsoBoiler.Tests
                                                      .GetObject();
             var action22 = () => ObjectMother<ExampleFunction>.Birth((context, services) => { /* empty for testing*/ })
                                                      .With<HealthCheckService>()
-                                                     .With<ILogBoiler>()
+                                                     .With<ILog>()
                                                      .GetObject();
             var action23 = () => ObjectMother<ExampleFunction>.Birth((context, services) => { /* empty for testing*/ })
                                                      .With<HealthCheckService>()
-                                                     .With(Mock.Of<ILogBoiler>())
+                                                     .With(Mock.Of<ILog>())
                                                      .GetObject();
 
             var action31 = () => ObjectMother<ExampleFunction>.Birth((context, services) => { /* empty for testing*/ })
@@ -112,11 +112,11 @@ namespace IsoBoiler.Tests
                                                      .GetObject();
             var action32 = () => ObjectMother<ExampleFunction>.Birth((context, services) => { /* empty for testing*/ })
                                                      .With(Mock.Of<HealthCheckService>())
-                                                     .With<ILogBoiler>()
+                                                     .With<ILog>()
                                                      .GetObject();
             var action33 = () => ObjectMother<ExampleFunction>.Birth((context, services) => { /* empty for testing*/ })
                                                      .With(Mock.Of<HealthCheckService>())
-                                                     .With(Mock.Of<ILogBoiler>())
+                                                     .With(Mock.Of<ILog>())
                                                      .GetObject();
             //Assert
             action11.Should().NotThrow<Exception>();
@@ -150,7 +150,7 @@ namespace IsoBoiler.Tests
             var action = () => ObjectMother<ExampleFunction>.Birth((context, services) =>
             {
                 services.AddSingleton(Mock.Of<HealthCheckService>());
-                services.AddSingleton(Mock.Of<ILogBoiler>());
+                services.AddSingleton(Mock.Of<ILog>());
             })
                                                     .GetObject();
             //Assert
@@ -166,7 +166,7 @@ namespace IsoBoiler.Tests
             {
                 services.AddSingleton(Mock.Of<HealthCheckService>());
             })
-                                                    .With(Mock.Of<ILogBoiler>())
+                                                    .With(Mock.Of<ILog>())
                                                     .GetObject();
             //Assert
             action.Should().NotThrow<Exception>();
@@ -176,8 +176,8 @@ namespace IsoBoiler.Tests
         public static async Task GetObject_WithOverrideFailing_Fails()
         {
             //Arrange
-            var succeedingLogBoilerMockObject = Mock.Of<ILogBoiler>();
-            var failingLogBoilerMock = new Mock<ILogBoiler>();
+            var succeedingLogBoilerMockObject = Mock.Of<ILog>();
+            var failingLogBoilerMock = new Mock<ILog>();
             failingLogBoilerMock.Setup(lb => lb.BeginScope(It.IsAny<FunctionContext>()))
                                 .Throws(new Exception("simulated failure"));
 
@@ -203,15 +203,15 @@ namespace IsoBoiler.Tests
         public static async Task GetObject_WithOverridePassing_Passes()
         {
             //Arrange
-            var succesedingLogBoilerMockObject = Mock.Of<ILogBoiler>();
-            var failingLogBoilerMock = new Mock<ILogBoiler>();
+            var succesedingLogBoilerMockObject = Mock.Of<ILog>();
+            var failingLogBoilerMock = new Mock<ILog>();
             failingLogBoilerMock.Setup(lb => lb.BeginScope(It.IsAny<FunctionContext>()))
                                 .Throws(new Exception("simulated failure"));
 
             var health = ObjectMother<ExampleFunction>.Birth((context, services) =>
                                                        {
-                                                          services.AddSingleton(Mock.Of<HealthCheckService>());
-                                                          services.AddSingleton(failingLogBoilerMock.Object);
+                                                           services.AddSingleton(Mock.Of<HealthCheckService>());
+                                                           services.AddSingleton(failingLogBoilerMock.Object);
                                                        })
                                                        .With(succesedingLogBoilerMockObject)
                                                        .GetObject();
@@ -235,7 +235,7 @@ namespace IsoBoiler.Tests
         {
             //Arrange
             var health = ObjectMother<ExampleFunction>.Birth(ExampleDefaultServiceProviderBuilder.GetServiceProvider())
-                                             .With<ILogBoiler>(logBoilerMock =>
+                                             .With<ILog>(logBoilerMock =>
                                              {
                                                  logBoilerMock.Setup(lb => lb.BeginScope(It.IsAny<FunctionContext>()))
                                                               .Throws(new Exception("simulated failure"));

@@ -2,7 +2,6 @@
 using Microsoft.Azure.Functions.Worker;
 using Microsoft.Azure.Functions.Worker.Http;
 using Moq;
-using System.IO;
 using System.Net;
 using System.Security.Claims;
 

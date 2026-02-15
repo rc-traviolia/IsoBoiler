@@ -31,8 +31,8 @@ namespace IsoBoiler.Tests
             var shippingFunction = ObjectMother<ExampleFunction>.Birth(ExampleDefaultServiceProviderBuilder.GetServiceProvider()).GetObject();
             var httpRequestData = HttpRequestDataMother.Birth().AddHeader("someHeaderValueOne", "value1")
                                                                 .AddHeader("someHeaderValueTwo", "value2")
-                                                                .AddQueryParameter("someQueryParameter1","val1")
-                                                                .AddQueryParameter("someQueryParameter2","val2")
+                                                                .AddQueryParameter("someQueryParameter1", "val1")
+                                                                .AddQueryParameter("someQueryParameter2", "val2")
                                                                 .GetObject();
 
             //Act

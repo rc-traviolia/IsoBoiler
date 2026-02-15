@@ -2,9 +2,7 @@
 using Microsoft.Azure.Functions.Worker.Http;
 using Moq;
 using Moq.Protected;
-using System.Diagnostics;
 using System.Net;
-using System.Net.Http;
 
 namespace IsoBoiler.Testing.HTTP
 {
@@ -190,7 +188,7 @@ namespace IsoBoiler.Testing.HTTP
                                            .Setup<Task<HttpResponseMessage>>("SendAsync", ItExpr.IsAny<HttpRequestMessage>(), ItExpr.IsAny<CancellationToken>())
                                            .ReturnsAsync(default404Message);
                 }
-               
+
 
                 foreach (var pendingHttpResponseMessage in multiplePendingHttpResponseMessages)
                 {

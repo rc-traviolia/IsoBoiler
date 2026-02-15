@@ -1,5 +1,4 @@
-﻿using Azure.Core.Serialization;
-using Azure.Identity;
+﻿using Azure.Identity;
 using IsoBoiler.Logging;
 using Microsoft.Azure.Functions.Worker;
 using Microsoft.Extensions.Configuration;
@@ -190,7 +189,7 @@ namespace IsoBoiler
         {
             iHostBuilder.ConfigureServices(services =>
             {
-                services.AddSingleton<ILogBoiler, LogBoiler>();
+                services.AddSingleton<ILog, IsoBoilerLogger>();
             });
 
             return iHostBuilder;

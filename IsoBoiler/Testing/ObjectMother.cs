@@ -43,7 +43,7 @@ namespace IsoBoiler.Testing
 
         public ObjectMother<TServiceToTest> With<TDependency>(Action<Mock<TDependency>>? setupDelegate = null) where TDependency : class
         {
-            if(setupDelegate is null)
+            if (setupDelegate is null)
             {
                 return this.With(Mock.Of<TDependency>());
             }
