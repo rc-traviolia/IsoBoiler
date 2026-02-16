@@ -47,7 +47,7 @@ namespace IsoBoiler
 
             var host = new HostBuilder().AddDefaultJsonSerializerOptions()
                                         .AddApplicationInsights()
-                                        .AddLogBoiler()
+                                        .AddILog()
                                         .AddConfiguration(storedConfigurationOptions)
                                         .ConfigureServices(configureDelegate)
                                         .Build();
@@ -64,7 +64,7 @@ namespace IsoBoiler
 
             var host = new HostBuilder().AddDefaultJsonSerializerOptions()
                                         .AddApplicationInsights()
-                                        .AddLogBoiler()
+                                        .AddILog()
                                         .AddConfiguration()
                                         .ConfigureServices(configureDelegate)
                                         .Build();
@@ -78,7 +78,7 @@ namespace IsoBoiler
             var host = new HostBuilder().ConfigureFunctionsWorkerDefaults() //Is inside AddConfiguration() as well. Changes here need to be made there.
                                         .AddDefaultJsonSerializerOptions()
                                         .AddApplicationInsights()
-                                        .AddLogBoiler()
+                                        .AddILog()
                                         .ConfigureServices(configureDelegate)
                                         .Build();
 

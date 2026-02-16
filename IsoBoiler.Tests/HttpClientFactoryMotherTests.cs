@@ -1,10 +1,10 @@
 ﻿using AwesomeAssertions;
 using IsoBoiler.Json;
 using IsoBoiler.Testing.HTTP;
-using IsoBoiler.Tests.Helpers;
+using IsoBoiler.UnitTests.Helpers;
 using System.Net;
 
-namespace IsoBoiler.Tests
+namespace IsoBoiler.UnitTests
 {
     public class HttpClientFactoryMotherTests
     {

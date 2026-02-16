@@ -1,4 +1,4 @@
-﻿namespace IsoBoiler.Tests.Helpers
+﻿namespace IsoBoiler.UnitTests.Helpers
 {
     public class ExampleRequest_WithRequiredProperties
     {

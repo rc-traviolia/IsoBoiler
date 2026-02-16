@@ -2,9 +2,13 @@
 using Microsoft.Azure.Functions.Worker.Http;
 using Moq;
 using Moq.Protected;
-using System.Diagnostics;
+using System;
+using System.Collections.Generic;
+using System.Linq.Expressions;
 using System.Net;
 using System.Net.Http;
+using System.Threading;
+using System.Threading.Tasks;
 
 namespace IsoBoiler.Testing.HTTP
 {
@@ -190,7 +194,7 @@ namespace IsoBoiler.Testing.HTTP
                                            .Setup<Task<HttpResponseMessage>>("SendAsync", ItExpr.IsAny<HttpRequestMessage>(), ItExpr.IsAny<CancellationToken>())
                                            .ReturnsAsync(default404Message);
                 }
-               
+
 
                 foreach (var pendingHttpResponseMessage in multiplePendingHttpResponseMessages)
                 {
@@ -222,6 +226,113 @@ namespace IsoBoiler.Testing.HTTP
                     BaseAddress = new Uri("https://localhost")
                 };
             }
+        }
+
+        public HttpMessageHandler GetMessageHandler()
+        {
+            if (isUsingSingleResponse is null)
+            {
+                throw new InvalidOperationException("You must call AlwaysRespondWith() or AddSpecificResponse() before calling GetObject().");
+            }
+
+            if (isUsingSingleResponse.Value)
+            {
+                var httpResponseMessage = new HttpResponseMessage
+                {
+                    StatusCode = singlePendingHttpResponseMessage.StatusCode,
+                    Content = singlePendingHttpResponseMessage.Content
+                };
+
+                foreach (var header in singlePendingHttpResponseMessage.Headers)
+                {
+                    httpResponseMessage.Headers.Add(header.Key, header.Value);
+                }
+
+                foreach (var header in globalHeaders)
+                {
+                    httpResponseMessage.Headers.Add(header.Key, header.Value);
+                }
+
+                httpMessageHandlerMock.Protected()
+                                       .Setup<Task<HttpResponseMessage>>("SendAsync", singlePendingHttpResponseMessage.RequestMessageItExpr, ItExpr.IsAny<CancellationToken>())
+                                       .ReturnsAsync(httpResponseMessage);
+
+                return httpMessageHandlerMock.Object;
+            }
+            else
+            {
+                //Add default 400 response for all other requests that are not matched
+                //MUST ADD FIRST. ADDING AFTER ANOTHER SETUP WILL OVERRIDE IT IF THE ItExpr MATCHES
+                if (Return404ForUnmappedRoutes)
+                {
+                    var default404Message = new HttpResponseMessage
+                    {
+                        StatusCode = HttpStatusCode.NotFound,
+                        Content = new StringContent("Not Found")
+                    };
+
+                    foreach (var header in globalHeaders)
+                    {
+                        default404Message.Headers.Add(header.Key, header.Value);
+                    }
+
+                    httpMessageHandlerMock.Protected()
+                                           .Setup<Task<HttpResponseMessage>>("SendAsync", ItExpr.IsAny<HttpRequestMessage>(), ItExpr.IsAny<CancellationToken>())
+                                           .ReturnsAsync(default404Message);
+                }
+
+
+                foreach (var pendingHttpResponseMessage in multiplePendingHttpResponseMessages)
+                {
+                    var httpResponseMessage = new HttpResponseMessage
+                    {
+                        StatusCode = pendingHttpResponseMessage.StatusCode,
+                        Content = pendingHttpResponseMessage.Content
+                    };
+
+                    foreach (var header in pendingHttpResponseMessage.Headers)
+                    {
+                        httpResponseMessage.Headers.Add(header.Key, header.Value);
+                    }
+
+                    foreach (var header in globalHeaders)
+                    {
+                        httpResponseMessage.Headers.Add(header.Key, header.Value);
+                    }
+
+                    httpMessageHandlerMock.Protected()
+                                           .Setup<Task<HttpResponseMessage>>("SendAsync", pendingHttpResponseMessage.RequestMessageItExpr, ItExpr.IsAny<CancellationToken>())
+                                           .ReturnsAsync(httpResponseMessage);
+                }
+
+                return httpMessageHandlerMock.Object;
+            }
+        }
+
+        public HttpClientMother VerifySendAsync(Times times)
+        {
+            httpMessageHandlerMock
+                .Protected()
+                .Verify(
+                    "SendAsync",
+                    times,
+                    ItExpr.IsAny<HttpRequestMessage>(),
+                    ItExpr.IsAny<CancellationToken>()
+                );
+            return this;
+        }
+
+        public HttpClientMother VerifySendAsync(Times times, Expression<Func<HttpRequestMessage, bool>> requestPredicate)
+        {
+            httpMessageHandlerMock
+                .Protected()
+                .Verify(
+                    "SendAsync",
+                    times,
+                    ItExpr.Is(requestPredicate),
+                    ItExpr.IsAny<CancellationToken>()
+                );
+            return this;
         }
     }
 

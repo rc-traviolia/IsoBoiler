@@ -1,9 +1,14 @@
 ﻿using IsoBoiler.Json;
+using IsoBoiler.Testing;
 using Microsoft.Azure.Functions.Worker;
 using Microsoft.Azure.Functions.Worker.Http;
 using Moq;
+using System;
+using System.Collections.Generic;
 using System.IO;
+using System.Linq;
 using System.Net;
+using System.Net.Http;
 using System.Security.Claims;
 
 namespace IsoBoiler.Testing.HTTP

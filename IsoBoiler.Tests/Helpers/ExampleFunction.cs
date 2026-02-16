@@ -1,18 +1,18 @@
-﻿using IsoBoiler.Http;
+﻿using IsoBoiler.HTTP;
 using IsoBoiler.Json;
 using IsoBoiler.Logging;
 using Microsoft.Azure.Functions.Worker;
 using Microsoft.Azure.Functions.Worker.Http;
 using Microsoft.Extensions.Diagnostics.HealthChecks;
 
-namespace IsoBoiler.Tests.Helpers
+namespace IsoBoiler.UnitTests.Helpers
 {
     public class ExampleFunction
     {
-        private readonly ILogBoiler _logger;
+        private readonly ILog _logger;
         private readonly HealthCheckService _healthCheck;
 
-        public ExampleFunction(ILogBoiler logger, HealthCheckService healthCheck)
+        public ExampleFunction(ILog logger, HealthCheckService healthCheck)
         {
             _logger = logger;
             _healthCheck = healthCheck;

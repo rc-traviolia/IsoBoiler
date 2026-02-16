@@ -1,7 +1,7 @@
 ﻿using Microsoft.Azure.Functions.Worker.Http;
 using System.Net;
 
-namespace IsoBoiler.Http
+namespace IsoBoiler.HTTP
 {
     public static class HttpRequestDataExtensions
     {

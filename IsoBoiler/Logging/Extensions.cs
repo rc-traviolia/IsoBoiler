@@ -1,8 +1,23 @@
-﻿namespace IsoBoiler.Logging
+﻿using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.DependencyInjection.Extensions;
+
+namespace IsoBoiler.Logging
 {
     public static class LoggingExtensions
     {
-        public static async Task LogExceptionsWith(this Task task, ILogBoiler logger)
+        public static IServiceCollection AddILog(this IServiceCollection services)
+        {
+            if (services == null)
+            {
+                throw new ArgumentNullException("services");
+            }
+
+            services.AddOptions();
+            services.TryAdd(ServiceDescriptor.Singleton<ILog, LogBoiler>());
+            return services;
+        }
+
+        public static async Task LogExceptionsWith(this Task task, ILog logger)
         {
             try
             {
@@ -15,7 +30,7 @@
             }
         }
 
-        public static async Task<T> LogExceptionsWith<T>(this Task<T> task, ILogBoiler logger)
+        public static async Task<T> LogExceptionsWith<T>(this Task<T> task, ILog logger)
         {
             try
             {

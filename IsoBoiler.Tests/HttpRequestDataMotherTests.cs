@@ -1,12 +1,12 @@
 ﻿using AwesomeAssertions;
 using IsoBoiler.Testing;
 using IsoBoiler.Testing.HTTP;
-using IsoBoiler.Tests.Helpers;
+using IsoBoiler.UnitTests.Helpers;
 using Microsoft.Azure.Functions.Worker;
 using Moq;
 using System.Net;
 
-namespace IsoBoiler.Tests
+namespace IsoBoiler.UnitTests
 {
     public class HttpRequestDataMotherTests
     {

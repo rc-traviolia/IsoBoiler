@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace IsoBoiler.Tests.Helpers
+namespace IsoBoiler.UnitTests.Helpers
 {
     public class ExampleRequest
     {

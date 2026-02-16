@@ -1,7 +1,7 @@
 ﻿using AwesomeAssertions;
 using IsoBoiler.Booleans;
 
-namespace IsoBoiler.Tests
+namespace IsoBoiler.UnitTests
 {
     public class BooleanExtensionsTests
     {

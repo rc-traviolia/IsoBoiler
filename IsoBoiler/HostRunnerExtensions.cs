@@ -91,7 +91,7 @@ namespace IsoBoiler
                                .ConfigureKeyVault(kv => { kv.SetCredential(new DefaultAzureCredential()); })
                                .ConfigureRefresh(refreshOptions =>
                                {
-                                   refreshOptions.Register($"{configurationFilter}:Sentinel", refreshAll: true)
+                                   refreshOptions.Register($"{configurationFilter}:{Constants.Sentinel}", refreshAll: true)
                                                  .SetRefreshInterval(TimeSpan.FromSeconds(30)); //Default value is 30
                                });
                     });
@@ -123,7 +123,7 @@ namespace IsoBoiler
                                .ConfigureKeyVault(kv => { kv.SetCredential(new DefaultAzureCredential()); })
                                .ConfigureRefresh(refreshOptions =>
                                {
-                                   refreshOptions.Register($"{configurationFilter}:Sentinel", refreshAll: true)
+                                   refreshOptions.Register($"{configurationFilter}:{Constants.Sentinel}", refreshAll: true)
                                                  .SetRefreshInterval(TimeSpan.FromSeconds(30)); //Default value is 30
                                });
                     });
@@ -186,11 +186,11 @@ namespace IsoBoiler
             return iHostBuilder;
         }
 
-        public static IHostBuilder AddLogBoiler(this IHostBuilder iHostBuilder)
+        public static IHostBuilder AddILog(this IHostBuilder iHostBuilder)
         {
             iHostBuilder.ConfigureServices(services =>
             {
-                services.AddSingleton<ILogBoiler, LogBoiler>();
+                services.AddSingleton<ILog, LogBoiler>();
             });
 
             return iHostBuilder;
@@ -206,17 +206,6 @@ namespace IsoBoiler
 
             return service;
         }
-        public static TConfiguration GetConfig<TConfiguration>(this IServiceCollection services)
-        {
-            var service = services.BuildServiceProvider().GetService<TConfiguration>();
-            if (service == null)
-            {
-                throw new InvalidOperationException($"Service type was not found in the IServicesCollection");
-            }
-
-            return service;
-        }
-
     }
 }
 

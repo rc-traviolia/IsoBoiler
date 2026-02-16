@@ -5,7 +5,7 @@ using System.Text.Json;
 
 namespace IsoBoiler.Logging
 {
-    public interface ILogBoiler
+    public interface ILog
     {
         IDisposable? BeginScope<TState>(TState state) where TState : notnull;
         IDisposable? BeginScope(string key, string value);
@@ -18,7 +18,7 @@ namespace IsoBoiler.Logging
         void Log(Exception exception, Dictionary<string, object> customProperties);
     }
 
-    public class LogBoiler : ILogBoiler
+    public class LogBoiler : ILog
     {
         public readonly ILogger _logger;
         public const string HTTP_TRIGGER = "HttpTrigger";
@@ -68,7 +68,7 @@ namespace IsoBoiler.Logging
 
         public void Log(Exception exception)
         {
-            if (exception is ExceptionBoiler exceptionBoiler)
+            if (exception is IsoBoilerException exceptionBoiler)
             {
                 Log(exceptionBoiler);
             }
@@ -78,7 +78,7 @@ namespace IsoBoiler.Logging
             }
         }
 
-        private void Log(ExceptionBoiler exception)
+        private void Log(IsoBoilerException exception)
         {
             using (BeginScope(exception.CustomProperties))
             {
