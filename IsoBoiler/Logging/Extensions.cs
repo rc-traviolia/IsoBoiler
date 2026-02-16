@@ -13,7 +13,7 @@ namespace IsoBoiler.Logging
             }
 
             services.AddOptions();
-            services.TryAdd(ServiceDescriptor.Singleton<ILog, LogBoiler>());
+            services.TryAdd(ServiceDescriptor.Singleton<ILog, IsoBoilerLogger>());
             return services;
         }
 

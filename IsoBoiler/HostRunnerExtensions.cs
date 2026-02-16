@@ -190,7 +190,7 @@ namespace IsoBoiler
         {
             iHostBuilder.ConfigureServices(services =>
             {
-                services.AddSingleton<ILog, LogBoiler>();
+                services.AddSingleton<ILog, IsoBoilerLogger>();
             });
 
             return iHostBuilder;
