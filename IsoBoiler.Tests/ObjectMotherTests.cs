@@ -210,8 +210,8 @@ namespace IsoBoiler.UnitTests
 
             var health = ObjectMother<ExampleFunction>.Birth((context, services) =>
                                                        {
-                                                          services.AddSingleton(Mock.Of<HealthCheckService>());
-                                                          services.AddSingleton(failingLogBoilerMock.Object);
+                                                           services.AddSingleton(Mock.Of<HealthCheckService>());
+                                                           services.AddSingleton(failingLogBoilerMock.Object);
                                                        })
                                                        .With(succesedingLogBoilerMockObject)
                                                        .GetObject();

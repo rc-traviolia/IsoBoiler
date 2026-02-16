@@ -18,13 +18,17 @@ namespace IsoBoiler.Logging
         void Log(Exception exception, Dictionary<string, object> customProperties);
     }
 
+<<<<<<<< HEAD:IsoBoiler/Logging/ILog.cs
     public class LogBoiler : ILog
+========
+    public class IsoBoilerLogger : ILog
+>>>>>>>> d0e6dde7b7d633d0ba6a06c98b0ad53646790063:IsoBoiler/Logging/IsoBoilerLogger.cs
     {
         public readonly ILogger _logger;
         public const string HTTP_TRIGGER = "HttpTrigger";
         public const string TIMER_TRIGGER = "TimerTrigger";
 
-        public LogBoiler(ILogger<LogBoiler> logger)
+        public IsoBoilerLogger(ILogger<IsoBoilerLogger> logger)
         {
             _logger = logger;
         }
